@@ -144,7 +144,7 @@ Confusingly, this will be looking for /etc/postfix/users.db
 
  To create this file, we need to create a Berkely database and add a user. 
 
- `{ echo user; echo ``mkpasswd -s -m sha-512``; } | sudo db_load -T -t hash /etc/postfix/users.db`
+     { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
 
  Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
 
