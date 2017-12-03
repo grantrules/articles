@@ -164,14 +164,18 @@ Transport Layer Security provides session encryption for Postfix. To implement t
 
 >**Enable TLS in Postfix**
 >
->    smtpd_tls_cert_file=/etc/letsencrypt/live/careers.bike/fullchain.pem
->    smtpd_tls_key_file=/etc/letsencrypt/live/careers.bike/privkey.pem
->    smtpd_use_tls=yes
->    smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
->    smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
->    smtpd_tls_security_level = may
->    smtp_tls_security_level = may
->    smtpd_tls_auth_only = yes
+> `sudo vi /etc/postfix/main.cf`
+>
+> ```
+smtpd_tls_cert_file=/etc/letsencrypt/live/careers.bike/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/careers.bike/privkey.pem
+smtpd_use_tls=yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_tls_security_level = may
+smtp_tls_security_level = may
+smtpd_tls_auth_only = yes
+```
 
 
 
