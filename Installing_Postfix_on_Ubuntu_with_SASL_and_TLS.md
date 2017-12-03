@@ -133,9 +133,9 @@ To create this file, we need to create a Berkely database and add a user.
 
 Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
 
-Once the database is set up, we'll go ahead and install Cyrus SASL.
-
 > **:bulb: Note:** PAM can be configured to authenticate against Unix accounts, database servers, and more
+
+Once the database is set up, we'll go ahead and install Cyrus SASL.
 
 > **Install Cyrus SASL**
 > 
