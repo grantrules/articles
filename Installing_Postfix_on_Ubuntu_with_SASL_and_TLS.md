@@ -110,10 +110,33 @@ Remember to reload the config with
 ----------
 
 
-User Authentication with Cyrus SASL
+User Authentication with PAM + Cyrus SASL
 -------------
 
-The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL in this article.
+The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL and configuring PAM to use a userdatabase in this section.
+
+First, PAM needs to be set up to handle SMTP authorization requests
+
+> **Create SMTP module for PAM**
+>
+> `sudo vi /etc/pam.d/smtp`
+>
+> Add these lines:
+> ```
+> auth    required   pam_userdb.so db=/etc/postfix/users crypt=crypt
+> account sufficient pam_userdb.so db=/etc/postfix/users crypt=crypt
+
+Confusingly, this will be looking for /etc/postfix/users.db
+
+To create this file, we need to create a Berkely database and add a user. 
+
+     { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
+
+Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
+
+Once the database is set up, we'll go ahead and install Cyrus SASL.
+
+> **:bulb: Note:** PAM can be configured to authenticate against Unix accounts, database servers, and more
 
 > **Install Cyrus SASL**
 > 
@@ -136,31 +159,8 @@ saslauthd is not a Postfix-specific service, but that's all we're going to be us
 > `OPTIONS="-c -m /var/spool/postfix/var/run/saslauthd"`
 
 > **:bulb: Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
- 
-By default saslauthd is authenticating to Unix accounts through PAM. We don't want to have to create new system accounts just to add mail users, so we're going to set up the smtp module for PAM to get the users from a database file. You can also set this up to use a database server like MySQL.
 
-Cyrus SASL does provide the auxprop mechanism instead of the PAM mechanism to allow plugins to authenticate against a file or database server, but these mothods store passwords in plain text (with root-only access), so they are not recommended to use. PAM stores encrypted passwords.
-
-First we need to set up a SMTP module for PAM
-
-> **Create SMTP module for PAM**
->
-> `sudo vi /etc/pam.d/smtp`
->
-> Add these lines:
-> ```
-> auth    required   pam_userdb.so db=/etc/postfix/users crypt=crypt
-> account sufficient pam_userdb.so db=/etc/postfix/users crypt=crypt
-
-Confusingly, this will be looking for /etc/postfix/users.db
-
-To create this file, we need to create a Berkely database and add a user. 
-
-     { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
-
-Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
-
-Once we've configured SASL to authenticate with our user database, we will add it to our postfix config, first by creating a smtpd.conf file for SASL then updating our main.cf
+Once we've configured SASL, we will add it to our postfix config, first by creating a smtpd.conf file for SASL then updating our main.cf
  
 >**Create SASL smtpd config**
 >
