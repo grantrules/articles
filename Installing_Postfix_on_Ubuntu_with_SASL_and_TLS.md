@@ -83,7 +83,7 @@ This server is just for intended sending emails from services. There are robust 
 >
 >Add the lines:
 >```virtual_alias_domains = $mydomain
->virtual_alias_maps = hash:/etc/postfix/virtual```
+>virtual_alias_maps = hash:/etc/postfix/virtual
 
 After saving the file, run
 
@@ -99,7 +99,7 @@ Now we'll configure Postfix to use those virtual aliases
 >
 >```virtual_alias_domains = $mydomain
 >virtual_alias_maps = hash:/etc/postfix/virtual
->disable_vrfy_command = yes```
+>disable_vrfy_command = yes
 
 Remember to reload the config with
 
@@ -130,7 +130,7 @@ Confirm the sasl service is running with the service command again
 >add these lines:
 >
 >```pwcheck_method: saslauthd
->mech_list: plain login```
+>mech_list: plain login
 
 Once SASL is configured, set up Postfix to rely on it.
 
@@ -146,7 +146,7 @@ Once SASL is configured, set up Postfix to rely on it.
 > smtpd_sasl_security_options = noanonymous
 > broken_sasl_auth_clients = yes
 > smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination
-> inet_interfaces = all```
+> inet_interfaces = all
 
 
 ----------
@@ -160,7 +160,7 @@ Transport Layer Security provides session encryption for Postfix. To implement t
 >**Install Lets Encrypt and generate certificates**
 >
 >```sudo apt install letsencrypt
->sudo letsencrypt certonly --standalone -d mail.grantrules.com```
+>sudo letsencrypt certonly --standalone -d mail.grantrules.com
 
 >**Enable TLS in Postfix**
 >
