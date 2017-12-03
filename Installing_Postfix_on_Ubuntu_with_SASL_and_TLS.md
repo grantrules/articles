@@ -86,7 +86,7 @@ This server is just for intended sending emails from services. There are robust 
 >virtual_alias_domains = $mydomain
 >virtual_alias_maps = hash:/etc/postfix/virtual
 
-After saving the file, run
+After saving the file, use *postmap* to update Postfix's internal lookup tables
 
 `sudo postmap /etc/postfix/virtual`
 
@@ -173,7 +173,7 @@ saslauthd is not a Postfix-specific service, but that's all we're going to be us
 
 > **:bulb: Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
 
-Once we've configured SASL, we will add it to our postfix config, first by creating a smtpd.conf file for SASL then updating our main.cf
+Once we've configured SASL, we will add it to our Postfix config, first by creating a smtpd.conf file for SASL then updating our main.cf
  
 >**Create SASL smtpd config**
 >
