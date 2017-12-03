@@ -167,10 +167,10 @@ saslauthd is not a Postfix-specific service, but that's all we're going to be us
 > Update the OPTIONS setting as follows
 >
 > `OPTIONS="-c -m /var/spool/postfix/var/run/saslauthd"`
->
-> Restart saslauthd
->
-> `sudo service saslauthd restart`
+
+Finally, restart the saslauthd service
+
+    sudo service saslauthd restart
 
 > **:bulb: Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
 
