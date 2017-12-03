@@ -147,7 +147,7 @@ pwcheck_method: auxprop
     sql_passwd: secret
     sql_database: dbname
     sql_select: SELECT password FROM users WHERE user = '%u@%r'
-    ```
+```
 
 Once SASL is configured, set up Postfix to rely on it.
 
