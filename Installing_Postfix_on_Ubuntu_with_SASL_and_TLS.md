@@ -125,8 +125,30 @@ Confirm the sasl service is running with the service command again
  
  saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot.
 
- We're going to set up user accounts in sasldb, other options include Unix accounts (this is default on Ubuntu), SQL, LDAP, and Kerberos.
+ By default saslauthd is authenticating to Unix accounts through PAM. We don't want to have to create new system accounts just to add mail users, so we're going to set up the smtp module for PAM to get the users from a database file. You can also set this up to use a database server like MySQL.
 
+ Cyrus SASL does provide the auxprop mechanism instead of the PAM mechanism to allow plugins to authenticate against a file or database server, but these mothods store passwords in plain text (with root-only access), so they are not recommended to use. PAM stores encrypted passwords.
+
+First we need to set up a SMTP module for PAM
+
+> **Create SMTP module for PAM**
+>
+> `sudo vi /etc/pam.d/smtp`
+>
+> Add these lines:
+> ```
+> auth    required   pam_userdb.so db=/etc/postfix/users crypt=crypt
+> account sufficient pam_userdb.so db=/etc/postfix/users crypt=crypt
+
+Confusingly, this will be looking for /etc/postfix/users.db
+
+ To create this file, we need to create a Berkely database and add a user. 
+
+ `{ echo user; echo ``mkpasswd -s -m sha-512``; } | sudo db_load -T -t hash /etc/postfix/users.db`
+
+ Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
+
+ 
 >**Create SASL smtpd config**
 >
 >`sudo vi /etc/postfix/sasl/smtpd.conf`
@@ -134,23 +156,9 @@ Confirm the sasl service is running with the service command again
 >add these lines:
 >
 >```
->pwcheck_method: auxprop
->auxprop_plugin: sasldb
->mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
-
-If you wanted to use PostgreSQL, your /etc/postfix/sasl/smtpd.conf would look like this:
-
-```
-pwcheck_method: auxprop
-auxprop_plugin: sql
-mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
-sql_engine: pgsql
-sql_hostnames: 127.0.0.1, 192.0.2.1
-sql_user: username
-sql_passwd: secret
-sql_database: dbname
-sql_select: SELECT password FROM users WHERE user = '%u@%r'
-```
+>saslauthd_path: /var/run/saslauthd/mux
+>pwcheck_method: saslauthd
+>mech_list: PLAIN LOGIN
 
 Once SASL is configured, set up Postfix to rely on it.
 
@@ -254,14 +262,16 @@ Some residential ISPs block service ports like 25
 
 ## Resources
 
-* http://www.postfix.org/SASL_README.html
-* http://postfix.state-of-mind.de/patrick.koetter/smtpauth/postfix_tls_support.html
-* https://www.bettercloud.com/monitor/spf-dkim-dmarc-email-security/
+
 * SPF RFC: https://tools.ietf.org/html/rfc7208
 * DKIM RFC: https://tools.ietf.org/html/rfc6376
 * DMARC RFC: https://tools.ietf.org/html/rfc7489
 * SASL RFC: https://tools.ietf.org/html/rfc4422
 * SMTP RFC: https://tools.ietf.org/html/rfc5321
+* http://postfix.state-of-mind.de/patrick.koetter/smtpauth/postfix_tls_support.html
+* https://www.bettercloud.com/monitor/spf-dkim-dmarc-email-security/
 * https://help.ubuntu.com/community/Postfix/DKIM
 * https://www.upcloud.com/support/secure-postfix-using-lets-encrypt/
 * https://www.safaribooksonline.com/library/view/postfix-the-definitive/0596002122/
+* http://www.postfix.org/SASL_README.html
+* http://www.postfix.org/VIRTUAL_README.html
