@@ -81,10 +81,9 @@ This server is just for intended sending emails from services. There are robust 
 >
 >`sudo vi /etc/postfix/virtual`
 >
->Add the lines:
+>Add the line:
 >```
->virtual_alias_domains = $mydomain
->virtual_alias_maps = hash:/etc/postfix/virtual
+>@grantrules.com youremail@gmail.com
 
 After saving the file, use *postmap* to update Postfix's internal lookup tables
 
