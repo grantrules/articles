@@ -65,7 +65,7 @@ Once connected, issue the EHLO command to get a response from the server
     
 The server should respond with a list of commands available, this just confirms the server is responding and is ready to receive email. Enter *quit* to exit the telnet session.
 
-> **Note:** After making any change in the Postfix config, reload the config with this command
+> **:bulb: Note:** After making any change in the Postfix config, reload the config with this command
 > 
 > `sudo service postfix reload`
 
@@ -135,7 +135,7 @@ saslauthd is not a Postfix-specific service, but that's all we're going to be us
 >
 > `OPTIONS="-c -m /var/spool/postfix/var/run/saslauthd"`
 
-> **Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
+> **:bulb: Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
  
 By default saslauthd is authenticating to Unix accounts through PAM. We don't want to have to create new system accounts just to add mail users, so we're going to set up the smtp module for PAM to get the users from a database file. You can also set this up to use a database server like MySQL.
 
