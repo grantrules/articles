@@ -56,9 +56,13 @@ Another way to verify Postfix is running is to connect to the server with telnet
     Connected to localhost
     Escape character is '^]'
     220 ubuntu ESMTP Postfix (Ubuntu)
-    > EHLO grantrules.com
+    >
+
+ Once connected, issue the EHLO command to get a response from the server
+
+     EHLO grantrules.com
     
-The server should respond with a list of commands available, this just confirms the server is responding. Enter *quit* to exit the telnet session.
+The server should respond with a list of commands available, this just confirms the server is responding and is ready to receive email. Enter *quit* to exit the telnet session.
 
 > **Note:** After making any change in the postfix config, reload the config with this command
 > 
@@ -77,10 +81,11 @@ This server is just for intended sending emails from services. There are robust 
 >`sudo vi /etc/postfix/virtual`
 >
 >Add the lines:
->`virtual_alias_domains = $mydomain
-virtual_alias_maps = hash:/etc/postfix/virtual`
+>`virtual_alias_domains = $mydomain`
+>`virtual_alias_maps = hash:/etc/postfix/virtual`
 
 After saving the file, run
+
 `sudo postmap /etc/postfix/virtual`
 
 Now we'll configure Postfix to use those virtual aliases
@@ -91,8 +96,8 @@ Now we'll configure Postfix to use those virtual aliases
 
 >Add the lines:
 
->`virtual_alias_domains = $mydomain
-virtual_alias_maps = hash:/etc/postfix/virtual`
+>`virtual_alias_domains = $mydomain`
+>`virtual_alias_maps = hash:/etc/postfix/virtual`
 
 Remember to reload the config with
 
@@ -114,8 +119,7 @@ Confirm the sasl service is running with the service command again
 
 `service saslauthd status`
  
- saslauthd is not a postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within 
-postfix's chroot.
+ saslauthd is not a postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within postfix's chroot.
 
 >**Create SASL smtpd config**
 >
@@ -123,8 +127,8 @@ postfix's chroot.
 >
 >add these lines:
 >
->`pwcheck_method: saslauthd
-mech_list: plain login`
+>`pwcheck_method: saslauthd`
+>`mech_list: plain login`
 
 Once SASL is configured, set up Postfix to rely on it.
 
@@ -135,13 +139,13 @@ Once SASL is configured, set up Postfix to rely on it.
 > 
 > add these lines:
 > 
-> `smtpd_sasl_path = smtpd
-smtpd_sasl_local_domain =
-smtpd_sasl_auth_enable = yes
-smtpd_sasl_security_options = noanonymous
-broken_sasl_auth_clients = yes
-smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination
-inet_interfaces = all`
+> `smtpd_sasl_path = smtpd`
+> `smtpd_sasl_local_domain =`
+> `smtpd_sasl_auth_enable = yes`
+> `smtpd_sasl_security_options = noanonymous`
+> `broken_sasl_auth_clients = yes`
+> `smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination`
+> `inet_interfaces = all`
 
 
 ----------
@@ -154,8 +158,8 @@ Transport Layer Security provides session encryption for Postfix. To implement t
 
 >**Install Lets Encrypt and generate certificates**
 >
->`sudo apt install letsencrypt
-sudo letsencrypt certonly --standalone -d mail.grantrules.com`
+>`sudo apt install letsencrypt`
+>`sudo letsencrypt certonly --standalone -d mail.grantrules.com`
 
 
 
@@ -198,7 +202,8 @@ DKIM uses public key encryption to allow the recipient to verify your mailserver
 
 ### DMARC: Domain-based Message Authentication, Reporting, and Conformance
 
-DMARC works with both SPF and DKIM and provides a way for receiving mailservers to report to 
+DMARC works with both SPF and DKIM and provides a way for receiving mailservers to report to an email specified by the sending domain.
+
 > **Example of DMARC DNS record**
 > `_dmarc.grantrules.com. IN TXT "v=DMARC1;p=none;sp=quarantine;pct=100;rua=mailto:dmarcreports@grantrules.com"`
 
