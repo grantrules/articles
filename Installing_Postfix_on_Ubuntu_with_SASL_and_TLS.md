@@ -59,7 +59,7 @@ Another way to verify Postfix is running is to connect to the server with telnet
     220 ubuntu ESMTP Postfix (Ubuntu)
     >
 
- Once connected, issue the EHLO command to get a response from the server
+Once connected, issue the EHLO command to get a response from the server
 
      EHLO grantrules.com
     
@@ -123,11 +123,23 @@ Confirm the sasl service is running with the service command again
 
 `service saslauthd status`
  
- saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot.
+saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot. Typically, defaults files should not be edited, but there is no other way to change where the PID file is located due to the design of this particular service.
 
- By default saslauthd is authenticating to Unix accounts through PAM. We don't want to have to create new system accounts just to add mail users, so we're going to set up the smtp module for PAM to get the users from a database file. You can also set this up to use a database server like MySQL.
+> **Edit SASL service config**
+>
+> Move the location of saslauthd's PID file to within Postfix's chroot environment
+> 
+> `sudo vi /etc/default/saslauthd`
+> 
+> Update the OPTIONS setting as follows
+>
+> `OPTIONS="-c -m /var/spool/postfix/var/run/saslauthd"`
 
- Cyrus SASL does provide the auxprop mechanism instead of the PAM mechanism to allow plugins to authenticate against a file or database server, but these mothods store passwords in plain text (with root-only access), so they are not recommended to use. PAM stores encrypted passwords.
+> **Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
+ 
+By default saslauthd is authenticating to Unix accounts through PAM. We don't want to have to create new system accounts just to add mail users, so we're going to set up the smtp module for PAM to get the users from a database file. You can also set this up to use a database server like MySQL.
+
+Cyrus SASL does provide the auxprop mechanism instead of the PAM mechanism to allow plugins to authenticate against a file or database server, but these mothods store passwords in plain text (with root-only access), so they are not recommended to use. PAM stores encrypted passwords.
 
 First we need to set up a SMTP module for PAM
 
@@ -274,5 +286,6 @@ Some residential ISPs block service ports like 25
 * https://help.ubuntu.com/community/Postfix/DKIM
 * https://www.upcloud.com/support/secure-postfix-using-lets-encrypt/
 * https://www.safaribooksonline.com/library/view/postfix-the-definitive/0596002122/
+* https://wiki.debian.org/PostfixAndSASL
 * http://www.postfix.org/SASL_README.html
 * http://www.postfix.org/VIRTUAL_README.html
