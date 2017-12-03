@@ -123,14 +123,31 @@ Confirm the sasl service is running with the service command again
  
  saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot.
 
+ We're going to set up user accounts in sasldb, other options include Unix accounts (this is default on Ubuntu), SQL, LDAP, and Kerberos.
+
 >**Create SASL smtpd config**
 >
 >`sudo vi /etc/postfix/sasl/smtpd.conf`
 >
 >add these lines:
 >
->```pwcheck_method: saslauthd
->mech_list: plain login
+>```pwcheck_method: auxprop
+>auxprop_plugin: sasldb
+>mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
+
+If you wanted to use PostgreSQL, your /etc/postfix/sasl/smtpd.conf would look like this:
+
+```
+pwcheck_method: auxprop
+    auxprop_plugin: sql
+    mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
+    sql_engine: pgsql
+    sql_hostnames: 127.0.0.1, 192.0.2.1
+    sql_user: username
+    sql_passwd: secret
+    sql_database: dbname
+    sql_select: SELECT password FROM users WHERE user = '%u@%r'
+    ```
 
 Once SASL is configured, set up Postfix to rely on it.
 
