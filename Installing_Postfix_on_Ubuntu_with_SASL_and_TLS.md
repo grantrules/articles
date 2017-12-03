@@ -142,12 +142,13 @@ First we need to set up a SMTP module for PAM
 
 Confusingly, this will be looking for /etc/postfix/users.db
 
- To create this file, we need to create a Berkely database and add a user. 
+To create this file, we need to create a Berkely database and add a user. 
 
      { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
 
- Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
+Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
 
+Once we've configured SASL to authenticate with our user database, we will add it to our postfix config, first by creating a smtpd.conf file for SASL then updating our main.cf
  
 >**Create SASL smtpd config**
 >
