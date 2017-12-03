@@ -47,7 +47,7 @@ Simply open up a console and run
 
 At the prompt *General type of mail configuration*, choose *Internet site* and enter your domain name on the following screen under *System mail name*.
 
-Once it's installed, confirm that the postfix service is running with this command:
+Once it's installed, confirm that the Postfix service is running with this command:
 
     service postfix status
 
@@ -65,7 +65,7 @@ Another way to verify Postfix is running is to connect to the server with telnet
     
 The server should respond with a list of commands available, this just confirms the server is responding and is ready to receive email. Enter *quit* to exit the telnet session.
 
-> **Note:** After making any change in the postfix config, reload the config with this command
+> **Note:** After making any change in the Postfix config, reload the config with this command
 > 
 > `sudo service postfix reload`
 
@@ -111,7 +111,7 @@ Remember to reload the config with
 User Authentication with Cyrus SASL
 -------------
 
-The first thing to do once postfix is running is to prevent people from anonymously sending mail. SASL is the standard that postfix will use to provide user authentication. There are two SASL implementations that are support by postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL in this article.
+The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL in this article.
 
 > **Install Cyrus SASL**
 > 
@@ -121,7 +121,7 @@ Confirm the sasl service is running with the service command again
 
 `service saslauthd status`
  
- saslauthd is not a postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within postfix's chroot.
+ saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot.
 
 >**Create SASL smtpd config**
 >
