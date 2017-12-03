@@ -4,7 +4,7 @@ Installing and Securing Postfix on Ubuntu 17.10
 >**``The Postfix security model is based on keeping software simple and stupid.''**
 > -- Wietse Venema, author of Postfix
 
-Postfix is an incredibly powerful mailserver which Ubuntu makes a breeze to get running. Unfortunately spam is a major problem with running a mailserver. A mailserver can be run as open or as closed as you want. To deliver mail to a Gmail inbox, it needs to be secure. This article will walk through installing Postfix, enabling user authentication with Cyrus SASL, requiring TLS session encryption with Let's Encrypt certificates, and implementing SPF, DKIM, and DMARC rules.
+Postfix is an incredibly powerful mailserver which Ubuntu makes a breeze to get running. Unfortunately spam is a major problem with running a mailserver. A mailserver can be run as open or as closed as you want. An open server can allow an anonymous user to send email from any email address to any email address. To deliver mail to a Gmail inbox, it needs to be secure. This article will walk through installing Postfix, enabling PAM user authentication with Cyrus SASL, requiring TLS session encryption with Let's Encrypt certificates, and implementing SPF, DKIM, and DMARC rules.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ Installing Postfix
 
 Simply open up a console and run
 
-    sudo apt-get install postfix
+    sudo apt install postfix
 
 At the prompt *General type of mail configuration*, choose *Internet site* and enter your domain name on the following screen under *System mail name*.
 
@@ -132,6 +132,9 @@ To create this file, we need to create a Berkely database and add a user.
      { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
 
 Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
+
+> **:bulb: Note:** If mkpasswd does not exist on your system, you can install it with `sudo apt install whois`
+
 
 > **:bulb: Note:** PAM can be configured to authenticate against Unix accounts, database servers, and more
 
@@ -269,7 +272,7 @@ Other common directives include *mx* which matches IP addresses in MX records, *
 ### DKIM: DomainKeys Identified Mail
 DKIM uses public key encryption to allow the recipient to verify your mailserver is authorized to send mail through your domain. To do this, we need to install opendkim
 
-    sudo apt-get install opendkim opendkim-tools
+    sudo apt install opendkim opendkim-tools
 
 ### DMARC: Domain-based Message Authentication, Reporting, and Conformance
 
