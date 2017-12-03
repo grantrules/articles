@@ -125,7 +125,7 @@ First, PAM needs to be set up to handle SMTP authorization requests
 > auth    required   pam_userdb.so db=/etc/postfix/users crypt=crypt
 > account sufficient pam_userdb.so db=/etc/postfix/users crypt=crypt
 
-Confusingly, this will be looking for /etc/postfix/users.db
+Confusingly, PAM will be looking for /etc/postfix/users.db
 
 To create this file, we need to create a Berkely database and add a user. 
 
@@ -134,7 +134,6 @@ To create this file, we need to create a Berkely database and add a user.
 Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
 
 > **:bulb: Note:** If mkpasswd does not exist on your system, you can install it with `sudo apt install whois`
-
 
 > **:bulb: Note:** PAM can be configured to authenticate against Unix accounts, database servers, and more
 
