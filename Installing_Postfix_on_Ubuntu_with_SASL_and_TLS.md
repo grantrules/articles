@@ -172,7 +172,7 @@ SPF, DKIM, and DMARC are all open standards to help prevent sender fraud. These 
 
 ### SPF: Sender Policy Framework
 
-Sender Policy Framework is simply a TXT record in your DNS that specifies a list of servers or IP ranges allowed to send email through your mailserver. When the receiving mailserver gets an email from you, it will check the DNS record for and SPF record, and try to match the sender's IP to any of the rules and then issue a pass or fail.
+Sender Policy Framework is simply a TXT record in your DNS that specifies a list of servers or IP ranges allowed to send email through from your domain. When the receiving mailserver gets an email from you, it will check the DNS record for and SPF record, and try to match the sender's IP to any of the rules and then issue a pass or fail.
 
 >**Example of SPF DNS record**
 > ` grantrules.com. IN TXT "v=spf1 ip4:192.168.0.0/16 a:friendlycorp.com -all"`
