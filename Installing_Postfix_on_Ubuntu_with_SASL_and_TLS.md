@@ -133,8 +133,7 @@ To create this file, we need to create a Berkely database and add a user.
 
 Make sure to replace *user* with the username you want. You will be prompted for a password for the user.
 
-> **:bulb: Note:** If mkpasswd does not exist on your system, you can install it with `sudo apt install whois`
-> [Why is mkpasswd in whois?](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=116260)
+> **:bulb: Note:** If mkpasswd does not exist on your system, you can install it with `sudo apt install whois` and if you're wondering why mkpasswd is in the whois package, [the answer is here](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=116260)
 
 > **:bulb: Note:** PAM can be configured to authenticate against Unix accounts, database servers, and more
 
