@@ -113,7 +113,7 @@ Remember to reload the config with
 User Authentication with PAM + Cyrus SASL
 -------------
 
-The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL and configuring PAM to use a userdatabase in this section.
+The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL and configuring PAM to use a userdatabase in this section. PAM (Pluggable Authentication Modules) provides dynamic authentication support for Linux systems.
 
 First, PAM needs to be set up to handle SMTP authorization requests
 
@@ -142,21 +142,34 @@ Once the database is set up, we'll go ahead and install Cyrus SASL.
 > 
 > `sudo apt install sasl2-bin`
 
+> **Add saslauthd user to postfix usergroup**
+> 
+> `sudo adduser postfix sasl`
+
+> **Create directory for sock file**
+> ```
+> sudo mkdir -p /var/spool/postfix/var/run/saslauthd
+> sudo chown sasl:postfix /var/spool/postfix/var/run/saslauthd
+
 Confirm the sasl service is running with the service command again
 
 `service saslauthd status`
  
-saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot. Typically, defaults files should not be edited, but there is no other way to change where the PID file is located due to the design of this particular service.
+saslauthd is not a Postfix-specific service, but that's all we're going to be using it for, so we need to edit the configuration to run within Postfix's chroot. Typically, defaults files should not be edited, but there is no other way to change where the sock file is located due to the design of this particular service.
 
 > **Edit SASL service config**
 >
-> Move the location of saslauthd's PID file to within Postfix's chroot environment
+> Move the location of saslauthd's sock file to within Postfix's chroot environment
 > 
 > `sudo vi /etc/default/saslauthd`
 > 
 > Update the OPTIONS setting as follows
 >
 > `OPTIONS="-c -m /var/spool/postfix/var/run/saslauthd"`
+>
+> Restart saslauthd
+>
+> `sudo service saslauthd restart`
 
 > **:bulb: Note:** If you use saslauthd for anything else, you can just copy /etc/default/saslauthd to /etc/default/postfix-saslauthd ane make the above changes to the new file.
 
