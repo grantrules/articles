@@ -139,14 +139,14 @@ If you wanted to use PostgreSQL, your /etc/postfix/sasl/smtpd.conf would look li
 
 ```
 pwcheck_method: auxprop
-    auxprop_plugin: sql
-    mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
-    sql_engine: pgsql
-    sql_hostnames: 127.0.0.1, 192.0.2.1
-    sql_user: username
-    sql_passwd: secret
-    sql_database: dbname
-    sql_select: SELECT password FROM users WHERE user = '%u@%r'
+auxprop_plugin: sql
+mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
+sql_engine: pgsql
+sql_hostnames: 127.0.0.1, 192.0.2.1
+sql_user: username
+sql_passwd: secret
+sql_database: dbname
+sql_select: SELECT password FROM users WHERE user = '%u@%r'
 ```
 
 Once SASL is configured, set up Postfix to rely on it.
