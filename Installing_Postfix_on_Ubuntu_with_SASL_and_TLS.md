@@ -160,8 +160,6 @@ saslauthd is not a Postfix-specific service, but that's all we're going to be us
 
 > **Edit SASL service config**
 >
-> Move the location of saslauthd's sock file to within Postfix's chroot environment
-> 
 > `sudo vi /etc/default/saslauthd`
 > 
 > Update the OPTIONS setting as follows
