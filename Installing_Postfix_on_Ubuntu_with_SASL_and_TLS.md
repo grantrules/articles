@@ -6,7 +6,7 @@ Installing and Securing Postfix on Ubuntu 17.10
 
 Postfix is an incredibly powerful mailserver which Ubuntu makes a breeze to get running. Unfortunately spam is a major problem with running a mailserver. A mailserver can be run as open or as closed as you want. To deliver mail to a Gmail inbox, it needs to be secure. This article will walk through installing Postfix, enabling user authentication with Cyrus SASL, requiring TLS session encryption with Let's Encrypt certificates, and implementing SPF, DKIM, and DMARC rules.
 
-##Table of Contents
+## Table of Contents
 
 [TOC]
 
@@ -73,7 +73,7 @@ The server should respond with a list of commands available, this just confirms 
 By default, Postfix in Ubuntu is configured to run within a chroot environment. This is changes the root directory to a path other than /, in the case of Postfix that is /var/spool/postfix/, so anything outside that directory is not accessible or visible from within the chroot. For added security, we'll make sure that all services we'll be setting up for Postfix run in this chroot as well.
 
 
-##Creating virtual mailboxes
+## Creating virtual mailboxes
 
 This server is just for intended sending emails from services. There are robust IMAP services like Cyrus and Dovecot, but for our purposes, we just want to forward everything that a domain receives to one gmail address.
 
