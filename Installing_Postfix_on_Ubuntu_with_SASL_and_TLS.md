@@ -99,6 +99,7 @@ Now we'll configure Postfix to use those virtual aliases
 >
 >`virtual_alias_domains = $mydomain`
 >`virtual_alias_maps = hash:/etc/postfix/virtual`
+>`disable_vrfy_command = yes`
 
 Remember to reload the config with
 
@@ -161,6 +162,16 @@ Transport Layer Security provides session encryption for Postfix. To implement t
 >`sudo apt install letsencrypt`
 >`sudo letsencrypt certonly --standalone -d mail.grantrules.com`
 
+>**Enable TLS in Postfix**
+>
+>    smtpd_tls_cert_file=/etc/letsencrypt/live/careers.bike/fullchain.pem
+>    smtpd_tls_key_file=/etc/letsencrypt/live/careers.bike/privkey.pem
+>    smtpd_use_tls=yes
+>    smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+>    smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+>    smtpd_tls_security_level = may
+>    smtp_tls_security_level = may
+>    smtpd_tls_auth_only = yes
 
 
 
