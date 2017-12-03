@@ -82,7 +82,8 @@ This server is just for intended sending emails from services. There are robust 
 >`sudo vi /etc/postfix/virtual`
 >
 >Add the lines:
->```virtual_alias_domains = $mydomain
+>```
+>virtual_alias_domains = $mydomain
 >virtual_alias_maps = hash:/etc/postfix/virtual
 
 After saving the file, run
@@ -97,7 +98,8 @@ Now we'll configure Postfix to use those virtual aliases
 >
 >Add the lines:
 >
->```virtual_alias_domains = $mydomain
+>```
+>virtual_alias_domains = $mydomain
 >virtual_alias_maps = hash:/etc/postfix/virtual
 >disable_vrfy_command = yes
 
@@ -131,7 +133,8 @@ Confirm the sasl service is running with the service command again
 >
 >add these lines:
 >
->```pwcheck_method: auxprop
+>```
+>pwcheck_method: auxprop
 >auxprop_plugin: sasldb
 >mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
 
@@ -157,7 +160,8 @@ Once SASL is configured, set up Postfix to rely on it.
 > 
 > add these lines:
 > 
-> ```smtpd_sasl_path = smtpd
+> ```
+> smtpd_sasl_path = smtpd
 > smtpd_sasl_local_domain =
 > smtpd_sasl_auth_enable = yes
 > smtpd_sasl_security_options = noanonymous
