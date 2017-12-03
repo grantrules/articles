@@ -16,8 +16,9 @@ In the age of cloud computing and APIs, why would you want to run your own mails
 
 ## Let's Get Started
 We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a gmail address.
-> **What you need before starting this article**
 
+> **What you need before starting this article**
+>
 > - Ubuntu 17.10 installation
 > - A domain name and control over its DNS records
 
@@ -93,9 +94,9 @@ Now we'll configure Postfix to use those virtual aliases
 > **Add virtual alias to main.cf**
 > 
 >`sudo vi /etc/postfix/main.cf`
-
+>
 >Add the lines:
-
+>
 >`virtual_alias_domains = $mydomain`
 >`virtual_alias_maps = hash:/etc/postfix/virtual`
 
@@ -134,7 +135,6 @@ Once SASL is configured, set up Postfix to rely on it.
 
 > **Configure Postfix to use SASL**
 > 
-
 > `sudo vi /etc/postfix/main.cf`
 > 
 > add these lines:
