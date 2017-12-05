@@ -1,5 +1,7 @@
 ---
 title: Installing and Securing Postfix on Ubuntu 17.10
+template: article
+shortdesc: A fairly comprehensive guide to installing Postfix on Ubuntu and setting up modern spam prevention tools that aid in secure delivery, including TLS encryption, PAM authentication, and SPF, DKIM, and DMARC records
 ---
 Installing and Securing Postfix on Ubuntu 17.10
 ===================

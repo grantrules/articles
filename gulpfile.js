@@ -10,14 +10,18 @@ var Handlebars = require('handlebars')
 
 
 var paths = {
-    articles: '*.md',
+    articles: ['*.md', '*.mdi'],
     templates: 'assets/templates/**/*.hb',
     images: 'assets/images/**/*'
 }
 
+var indexList = [];
+
 var templates = {}
 
 gulp.task('clean', function() {
+    indexList = []
+    templates = {}
     return del(['build'])
 })
 
@@ -32,7 +36,7 @@ gulp.task('images', ['clean'], function() {
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(paths.articles, ['articles'])
+    gulp.watch([paths.articles, paths.templates], ['site'])
     gulp.watch(paths.images, ['images'])
 })
 
@@ -48,12 +52,19 @@ gulp.task('articles', ['clean', 'templates'], function() {
     return gulp.src(paths.articles)
         .pipe(frontMatter({remove:true, property: 'frontMatter'}))
         .pipe(markdown())
+        .pipe(index())        
         .pipe(compileArticle())
         .pipe(gulp.dest('build'))
 })
-  
-gulp.task('default', ['watch', 'articles', 'images'])
 
+gulp.task('site', ['articles'], function() {
+//
+})
+  
+gulp.task('default', ['watch', 'site', 'images'])
+
+/* load frontmatter into file.frontMatter
+   and convert markdown to html */
 var compileArticle = (data, opts) => {
 
     return through.obj(function(file, enc, cb) {
@@ -66,7 +77,8 @@ var compileArticle = (data, opts) => {
 
         var body = file.contents.toString();
         var meta = file.frontMatter;
-        var content = templates['index.hb']({body: body, ...meta});
+        var template = (meta && meta.template) || 'article'
+        var content = templates[`${template}.hb`]({body: body, ...meta});
         
         file.contents = new Buffer(content);
         
@@ -76,6 +88,7 @@ var compileArticle = (data, opts) => {
       });
 }
 
+/* compile template and store it in object */
 var setTemplates = (data, opts) => {
 
     return through.obj(function(file, enc, cb) {
@@ -93,4 +106,16 @@ var setTemplates = (data, opts) => {
         cb(null, file)
     
       });
+}
+
+/* create index list of articles */
+var index = (data, opts) => {
+    return through.obj(function(file, enc, cb) {
+        if (file.relative === 'index.html') {            
+            file.frontMatter = {...file.frontMatter, indexList}
+        } else {
+            indexList.push({...file.frontMatter, url: file.relative})   
+        }
+        cb(null, file)
+    });
 }
