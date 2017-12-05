@@ -1,3 +1,6 @@
+---
+title: Installing and Securing Postfix on Ubuntu 17.10
+---
 Installing and Securing Postfix on Ubuntu 17.10
 ===================
 
