@@ -3,9 +3,6 @@ title: Installing and Securing Postfix on Ubuntu 17.10
 template: article
 shortdesc: A fairly comprehensive guide to installing Postfix on Ubuntu and setting up modern spam prevention tools that aid in secure delivery, including TLS encryption, PAM authentication, and SPF, DKIM, and DMARC records
 ---
-Installing and Securing Postfix on Ubuntu 17.10
-===================
-
 >**``The Postfix security model is based on keeping software simple and stupid.''**
 > -- Wietse Venema, author of Postfix
 
@@ -13,7 +10,7 @@ Postfix is an incredibly powerful mailserver which Ubuntu makes a breeze to get 
 
 ## Table of Contents
 
-[TOC]
+[[TOC]]
 
 ## Why?
 In the age of cloud computing and APIs, why would you want to run your own mailserver when you can just pay a professional service to deliver those emails for you? Well first, it's free. There's no trial period, user limits, or restrictions, and it's very reliable. It's pretty easy to get a mailserver up and running for your development environment, but if you want someone to be able to receive those emails without checking their spam folder, it requires configuration. This is also a great way to become familiar with a Linux system.
