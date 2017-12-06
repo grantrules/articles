@@ -81,7 +81,7 @@ a {text-decoration: none;}
           box-shadow: 0 3px 10px 0 rgba(0,0,0,0.36);
         }
         main, footer {
-            padding: 15px 20%;
+            padding: 15px 5%;
         }
 
         footer {
@@ -96,6 +96,10 @@ background-size: 90px auto;
 background-position: right 8px;
 background-repeat: no-repeat;
                     }
+            @media screen and (min-width: 620px) { 
+                main, footer {
+                padding: 15px 20%;
+        }
         </style>
   </head>
   <body>
