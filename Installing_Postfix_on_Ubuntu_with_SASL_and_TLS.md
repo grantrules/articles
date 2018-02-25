@@ -3,7 +3,7 @@ title: Installing and Securing Postfix on Ubuntu 17.10
 template: article
 shortdesc: A fairly comprehensive guide to installing Postfix on Ubuntu and setting up modern spam prevention tools that aid in secure delivery, including TLS encryption, PAM authentication, and SPF, DKIM, and DMARC records
 ---
->**``The Postfix security model is based on keeping software simple and stupid.''**
+>**''The Postfix security model is based on keeping software simple and stupid.''**
 > -- Wietse Venema, author of Postfix
 
 Postfix is an incredibly powerful mailserver which Ubuntu makes a breeze to get running. Unfortunately spam is a major problem with running a mailserver. A mailserver can be run as open or as closed as you want. An open server can allow an anonymous user to send email from any email address to any email address. To deliver mail to a Gmail inbox, it needs to be secure. This article will walk through installing Postfix, enabling PAM user authentication with Cyrus SASL, requiring TLS session encryption with Let's Encrypt certificates, and implementing SPF, DKIM, and DMARC rules.
@@ -35,6 +35,7 @@ The mail server will use user authentication to verify the sender.
 The mail client will use a variety of tools to verify the mailserver is authorized to send email for the author's domain. The tools are SPF, DKIM, and DMARC and there's an explanation of them here: https://www.endpoint.com/blog/2014/04/15/spf-dkim-and-dmarc-brief-explanation
 
 Briefly, they're DNS record entries for a domain that tell mail clients where emails will be originating from and what the allowed mail servers are.
+
 
 
 ----------
@@ -114,7 +115,7 @@ Remember to reload the config with
 User Authentication with PAM + Cyrus SASL
 -------------
 
-The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are support by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL and configuring PAM to use a userdatabase in this section. PAM (Pluggable Authentication Modules) provides dynamic authentication support for Linux systems.
+The first thing to do once Postfix is running is to prevent people from anonymously sending mail. SASL is the standard that Postfix will use to provide user authentication. There are two SASL implementations that are supported by Postfix on Ubuntu by default, Dovecot and Cyrus. I will be setting up Cyrus SASL and configuring PAM to use a userdatabase in this section. PAM (Pluggable Authentication Modules) provides dynamic authentication support for Linux systems.
 
 First, PAM needs to be set up to handle SMTP authorization requests
 
@@ -225,8 +226,8 @@ Transport Layer Security provides session encryption for Postfix. To implement t
 > Add these lines:
 >
 > ```
-> smtpd_tls_cert_file=/etc/letsencrypt/live/careers.bike/fullchain.pem
-> smtpd_tls_key_file=/etc/letsencrypt/live/careers.bike/privkey.pem
+> smtpd_tls_cert_file=/etc/letsencrypt/live/mail.grantrules.com/fullchain.pem
+> smtpd_tls_key_file=/etc/letsencrypt/live/mail.grantrules.com/privkey.pem
 > smtpd_use_tls=yes
 > smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 > smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
@@ -256,7 +257,15 @@ Sender Policy Framework is simply a TXT record in your DNS that specifies a list
 
 In the example, we define the version as *spf1* and then add 3 directives: *ip4:192.168.0.0/16*, *a:friendlycorp.com*, *-all*
 
-Directives involve a mechanism (ip4, a, all) and are prefixed by a qualifier (+, -, ~). If no qualifier is present, + is implied. So *ip4:192.168.1.1* is the same as *+ip4:192.168.1.1*.
+Directives involve a mechanism (ip4, a, all) and are prefixed by a qualifier (+, -, ~, ?). If no qualifier is present, + is implied. So *ip4:192.168.1.1* is the same as *+ip4:192.168.1.1*.
+
+>**SPF qualifiers**
+>| Qualifier | Description |
+>| ------ | ----------- |
+>| +   | Pass |
+>| - | Fail |
+>| ?    | Neutral, like there has been no check |
+>| ~ | Softfail, typically messages are accepted but tagged |
 
 The first directive, *ip4:192.168.0.0/16*, defines an IPv4 address range that are authorized to send emails through your server. It can be a single IP address or a range in CIDR notation. In this example, it allows all IP addresses on our subnet, from 192.168.0.0 to 192.168.255.255, good if you want anyone on your local network to be able to send emails through your server.
 

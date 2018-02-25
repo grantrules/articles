@@ -48,8 +48,8 @@ gulp.task('templates', function() {
 gulp.task('articles', ['clean', 'templates'], function() {
     return gulp.src(paths.articles)
         .pipe(frontMatter({remove:true, property: 'frontMatter'}))
-        .pipe(markdown({plugins: ["markdown-it-emoji", "markdown-it-table-of-contents"]}))
-        .pipe(index())        
+        .pipe(markdown({options: {html: true, typographer: true, linkify: true}, plugins: ["markdown-it-emoji", "markdown-it-table-of-contents"]}))
+        .pipe(index())
         .pipe(compileArticle())
         .pipe(gulp.dest('build'))
 })

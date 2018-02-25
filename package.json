@@ -4,7 +4,7 @@
   "description": "Grant's Blog",
   "main": "gulp.js",
   "scripts": {
-    "start": "node gulp.js",
+    "start": "node node_modules/gulp/bin/gulp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "gulp-front-matter": "^1.3.0",
     "gulp-handlebars": "^4.0.0",
     "gulp-markdown-it": "^0.1.1",
+    "linkify-it": "^2.0.3",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-table-of-contents": "^0.3.3"
   }
