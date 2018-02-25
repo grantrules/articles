@@ -17,7 +17,7 @@ In the age of cloud computing and APIs, why would you want to run your own mails
 
 
 ## Let's Get Started
-We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a gmail address.
+We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a Gmail address.
 
 > **What you need before starting this article**
 >
@@ -26,7 +26,7 @@ We will be focusing on setting up Postfix for sending emails only. Cyrus provide
 
 Take for instance sending mail through the postal service. You can write a letter and put a fake return name and address on it. You can write a return address from Alaska and drop it in a box in Florida and it will be received. Postfix, by default will send any email with whatever "from" address the sender decides to put. It may not be an email address the sender has any control over, which is called origin fraud or spoofing. Obviously mail clients want to limit this, once spoofed emails are delivered, they can be fairly hard to detect for a user (without digging into the email headers).
 
-If I were to try to send an email through gmail addressed from billgates@microsoft.com it wouldn't let me.
+If I were to try to send an email through Gmail addressed from billgates@microsoft.com it wouldn't let me.
 
 In order for email to be delivered, the mail server needs to trust the author of the email and the mail client needs to trust the mail server.
 
@@ -78,7 +78,7 @@ By default, Postfix in Ubuntu is configured to run within a chroot environment. 
 
 ## Creating virtual mailboxes
 
-This server is just for intended sending emails from services. There are robust IMAP services like Cyrus and Dovecot, but for our purposes, we just want to forward everything that a domain receives to one gmail address.
+This server is just for intended sending emails from services. There are robust IMAP services like Cyrus and Dovecot, but for our purposes, we just want to forward everything that a domain receives to one Gmail address.
 
 >**Create virtual alias file**
 >
