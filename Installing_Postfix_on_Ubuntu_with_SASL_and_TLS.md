@@ -17,8 +17,7 @@ In the age of cloud computing and APIs, why would you want to run your own mails
 
 
 ## Let's Get Started
-We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a 
- address.
+We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a Gmail address.
 
 > **What you need before starting this article**
 >
