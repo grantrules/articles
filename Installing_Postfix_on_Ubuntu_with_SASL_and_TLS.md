@@ -17,7 +17,8 @@ In the age of cloud computing and APIs, why would you want to run your own mails
 
 
 ## Let's Get Started
-We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a Gmail address.
+We will be focusing on setting up Postfix for sending emails only. Cyrus provides an IMAP server that is fairly easy to set up, but for the purposes of this article, we'll be forwarding all received email to a 
+ address.
 
 > **What you need before starting this article**
 >
@@ -130,7 +131,7 @@ First, PAM needs to be set up to handle SMTP authorization requests
 
 Confusingly, PAM will be looking for /etc/postfix/users.db
 
-To create this file, we need to create a Berkely database and add a user. 
+To create this file, we need to create a Berkeley database and add a user. 
 
      { echo user; echo `mkpasswd -s -m sha-512`; } | sudo db_load -T -t hash /etc/postfix/users.db
 
